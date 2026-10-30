@@ -155,21 +155,34 @@
     });
   }
 
-  // The rail never scrolls: when the tree grows past the screen height, drop
-  // the avatar, then the links. Re-checked after the tree's open/close
-  // animation (.4s) and on resize.
+  // The rail never scrolls: when the tree grows past the screen height, the
+  // avatar shrinks to fit, then the links drop out, and the avatar is hidden
+  // only once it would be too small to see. Re-checked after the tree's
+  // open/close animation (.4s) and on resize.
   function setupRailFit(tree) {
     var rail = tree.closest(".rail");
-    if (!rail) return;
-    var steps = ["no-art", "no-links"];
+    var art = document.getElementById("railArt");
+    if (!rail || !art) return;
+    var frame = art.querySelector(".rail-art__frame");
+    var MIN_ART = 70;
     var timer;
+    function over() { return rail.scrollHeight - rail.clientHeight; }
+    function shrinkArt() {
+      var o = over();
+      if (o <= 1) return true;
+      var h = frame.getBoundingClientRect().height;
+      if (h - o < MIN_ART) return false;
+      art.style.maxWidth = (art.getBoundingClientRect().width * (h - o) / h) + "px";
+      return true;
+    }
     function fit() {
-      rail.classList.remove("rail-overflow");
-      steps.forEach(function (c) { rail.classList.remove(c); });
-      for (var i = 0; i < steps.length && rail.scrollHeight > rail.clientHeight + 1; i++) {
-        rail.classList.add(steps[i]);
-      }
-      rail.classList.toggle("rail-overflow", rail.scrollHeight > rail.clientHeight + 1);
+      rail.classList.remove("rail-overflow", "no-art", "no-links");
+      art.style.maxWidth = "";
+      if (shrinkArt() && over() <= 1) return;
+      art.style.maxWidth = "";
+      rail.classList.add("no-links");
+      if (!shrinkArt()) rail.classList.add("no-art");
+      rail.classList.toggle("rail-overflow", over() > 1);
     }
     function later() { clearTimeout(timer); timer = setTimeout(fit, 450); }
     new MutationObserver(later).observe(tree, { subtree: true, attributes: true, attributeFilter: ["class"] });
