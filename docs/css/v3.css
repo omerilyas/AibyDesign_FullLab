@@ -299,6 +299,12 @@
 #tree a.lvl-1.on { color: var(--ink); }
 #tree a.lvl-1.on .br { color: var(--accent); }
 #tree .tree-sections { padding-left: 1.1rem; margin: .1rem 0 .3rem; }
+/* The tree is never clipped: on short screens the whole rail scrolls instead,
+   so every task stays visible and the avatar and LINKS sit below it. */
+.rail > #tree { flex: none; overflow: visible; min-height: 0; }
+.rail { scrollbar-width: thin; scrollbar-color: var(--ink-4) transparent; }
+.rail::-webkit-scrollbar { display: block; width: 6px; }
+.rail::-webkit-scrollbar-thumb { background: var(--ink-4); border-radius: 3px; }
 
 /* V3 nests tabs up to four deep. Borders and side padding at every level drew
    stacked lines down both sides and narrowed the text, so tabs are borderless. */
