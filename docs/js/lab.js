@@ -53,6 +53,7 @@
     setupScroll(heads, linkById);
     setupKeys(heads);
     setupTreeToggle(tree);
+    setupRailFit(tree);
     setupRailTitle();
     setupNotes();
     setupReport(links);
@@ -152,6 +153,29 @@
         group.classList.remove("open");
       }
     });
+  }
+
+  // The rail never scrolls: when the tree grows past the screen height, drop
+  // the avatar, then the links. Re-checked after the tree's open/close
+  // animation (.4s) and on resize.
+  function setupRailFit(tree) {
+    var rail = tree.closest(".rail");
+    if (!rail) return;
+    var steps = ["no-art", "no-links"];
+    var timer;
+    function fit() {
+      rail.classList.remove("rail-overflow");
+      steps.forEach(function (c) { rail.classList.remove(c); });
+      for (var i = 0; i < steps.length && rail.scrollHeight > rail.clientHeight + 1; i++) {
+        rail.classList.add(steps[i]);
+      }
+      rail.classList.toggle("rail-overflow", rail.scrollHeight > rail.clientHeight + 1);
+    }
+    function later() { clearTimeout(timer); timer = setTimeout(fit, 450); }
+    new MutationObserver(later).observe(tree, { subtree: true, attributes: true, attributeFilter: ["class"] });
+    window.addEventListener("resize", later);
+    fit();
+    later();
   }
 
   // ── J / K section jumps ──────────────────────────────────────────────

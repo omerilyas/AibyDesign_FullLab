@@ -299,12 +299,19 @@
 #tree a.lvl-1.on { color: var(--ink); }
 #tree a.lvl-1.on .br { color: var(--accent); }
 #tree .tree-sections { padding-left: 1.1rem; margin: .1rem 0 .3rem; }
-/* The tree is never clipped: on short screens the whole rail scrolls instead,
-   so every task stays visible and the avatar and LINKS sit below it. */
-.rail > #tree { flex: none; overflow: visible; min-height: 0; }
-.rail { scrollbar-width: thin; scrollbar-color: var(--ink-4) transparent; }
-.rail::-webkit-scrollbar { display: block; width: 6px; }
-.rail::-webkit-scrollbar-thumb { background: var(--ink-4); border-radius: 3px; }
+/* The tree is never clipped and the rail never scrolls. Progress, avatar and
+   LINKS sit at the bottom of the rail; when the screen is too short, lab.js
+   hides the avatar, then the links, so every task stays visible. */
+.rail > #tree { flex: none; overflow: visible; min-height: 0; margin-bottom: 1.3rem; }
+.rail { overflow: hidden; }
+.rail.rail-overflow { overflow-y: auto; }
+.rail > .prog { margin-top: auto; }
+.rail.no-art .rail-art { display: none; }
+.rail.no-links .share { display: none; }
+@media (max-width: 59.99em) {
+  .rail, .rail.rail-overflow { overflow: visible; }
+  .rail > .prog { margin-top: 0; }
+}
 
 /* V3 nests tabs up to four deep. Borders and side padding at every level drew
    stacked lines down both sides and narrowed the text, so tabs are borderless. */
