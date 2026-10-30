@@ -1,0 +1,324 @@
+/* Additions for the AI by Design v3 content on top of lab.css:
+   the admonition and collapsible types v3 uses, and the v3 Key Vault. */
+
+.md-typeset.prose .admonition.important { --c: var(--warn); }
+.md-typeset.prose .admonition.download { --c: var(--info); }
+.md-typeset.prose .admonition.challenge { --c: var(--tip); }
+/* Reference-only material students don't run: greyed out, full strength on hover. */
+.md-typeset.prose .admonition.optional {
+  --c: var(--ink-3);
+  border-left-style: dashed;
+  opacity: .55;
+  filter: grayscale(1);
+  transition: opacity .2s;
+}
+.md-typeset.prose .admonition.optional:hover { opacity: .9; }
+
+/* Collapsible panels (??? note / ??? info) in the same style as admonitions */
+.md-typeset.prose details {
+  --c: var(--ink-3);
+  border: 0;
+  border-left: 3px solid var(--c);
+  border-radius: 0;
+  background: color-mix(in srgb, var(--c) 8%, var(--bg-raised));
+  box-shadow: none;
+  font-size: .78rem;
+  line-height: 1.65;
+  color: var(--ink-2);
+  padding: .1rem 1rem;
+  margin: 1rem 0 1.4rem;
+}
+.md-typeset.prose details.note { --c: var(--ok); }
+.md-typeset.prose details.tip { --c: var(--tip); }
+.md-typeset.prose details.info { --c: var(--info); }
+.md-typeset.prose details.important,
+.md-typeset.prose details.warning { --c: var(--warn); }
+.md-typeset.prose details > summary {
+  background: transparent;
+  border: 0;
+  margin: 0;
+  padding: .75rem 1.6rem .6rem 0;
+  font-family: var(--mono);
+  font-weight: 500;
+  font-size: .58rem;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  color: var(--c);
+}
+.md-typeset.prose details > summary::before { display: none; }
+.md-typeset.prose details > summary::after { background-color: var(--c); top: .7rem; right: 0; }
+
+/* ── Key Vault (from v3 extra.css) ── */
+/* ═══════════════════════════════════════════════
+   Key Vault: floating localStorage panel
+   ═══════════════════════════════════════════════ */
+
+.vault-fab {
+  position: fixed;
+  bottom: 2rem;
+  left: 2rem;
+  z-index: 998;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.7rem 1.2rem;
+  background: rgba(11, 17, 32, 0.95);
+  border: 1px solid rgba(59, 158, 255, 0.3);
+  border-radius: 10px;
+  color: #3b9eff;
+  font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4), 0 0 15px rgba(59, 158, 255, 0.1);
+  transition: all 0.3s ease;
+  animation: fabPulse 3s ease-in-out infinite;
+}
+
+.vault-fab:hover {
+  border-color: rgba(59, 158, 255, 0.6);
+  color: #fff;
+  transform: translateY(-2px);
+}
+
+.vault-fab .fab-prompt { color: #34d399; }
+.vault-fab .fab-cursor {
+  display: inline-block;
+  width: 6px;
+  height: 13px;
+  background: #3b9eff;
+  animation: blink 1.2s step-end infinite;
+  vertical-align: middle;
+  margin-left: 2px;
+}
+
+@keyframes blink { 50% { opacity: 0; } }
+
+.vault-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+.vault-overlay.open {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.vault-panel {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 380px;
+  max-height: 85vh;
+  z-index: 1001;
+  background: #0d1526;
+  border: 1px solid rgba(59, 158, 255, 0.15);
+  border-radius: 0 16px 0 0;
+  box-shadow: 0 -8px 40px rgba(0, 0, 0, 0.5);
+  transform: translateX(-100%);
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.vault-panel.open {
+  transform: translateX(0);
+}
+
+.vault-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.2rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(59, 158, 255, 0.04);
+}
+
+.vault-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.vault-close {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 1.4rem;
+  cursor: pointer;
+  padding: 0 0.3rem;
+  transition: color 0.2s;
+}
+.vault-close:hover { color: #fff; }
+
+.vault-body {
+  padding: 1rem 1.2rem;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.vault-field {
+  margin-bottom: 1rem;
+}
+
+.vault-field label {
+  display: block;
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: #3b9eff;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 0.4rem;
+}
+
+.vault-input-row {
+  display: flex;
+  gap: 0.3rem;
+}
+
+.vault-input-row input {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+  padding: 0.5rem 0.7rem;
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  font-size: 0.72rem;
+  color: rgba(255, 255, 255, 0.8);
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.vault-input-row input::placeholder {
+  color: rgba(255, 255, 255, 0.2);
+}
+
+.vault-input-row input:focus {
+  border-color: rgba(59, 158, 255, 0.4);
+}
+
+.vault-eye,
+.vault-copy {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+  padding: 0.4rem;
+  color: rgba(255, 255, 255, 0.3);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.vault-eye:hover,
+.vault-copy:hover {
+  color: #3b9eff;
+  border-color: rgba(59, 158, 255, 0.3);
+}
+
+.vault-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.8rem 1.2rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.vault-note {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.65rem;
+  color: rgba(255, 255, 255, 0.25);
+}
+
+.vault-clear {
+  background: rgba(244, 63, 94, 0.1);
+  border: 1px solid rgba(244, 63, 94, 0.2);
+  border-radius: 6px;
+  padding: 0.35rem 0.8rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #f43f5e;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.vault-clear:hover {
+  background: rgba(244, 63, 94, 0.2);
+  border-color: rgba(244, 63, 94, 0.4);
+}
+
+@media screen and (max-width: 48em) {
+  .vault-panel { width: 100%; border-radius: 16px 16px 0 0; }
+  .vault-fab { bottom: 1rem; left: 1rem; }
+}
+
+
+/* Key Vault button styled like the Notes button, stacked above it. */
+.vault-fab,
+.vault-fab:hover {
+  right: 1.2rem;
+  bottom: 3.6rem;
+  left: auto;
+  z-index: 5;
+  gap: .3rem;
+  padding: .6rem .9rem;
+  font-family: var(--mono);
+  font-size: .6rem;
+  font-weight: 400;
+  letter-spacing: .05em;
+  color: var(--bg);
+  background: var(--ink);
+  border: 0;
+  border-radius: 0;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, .18);
+  animation: none;
+}
+.vault-fab:hover { transform: translateY(-2px); }
+.vault-fab .fab-prompt { color: var(--accent); }
+.vault-fab .fab-cursor { background: var(--bg); width: 5px; height: 10px; }
+.vault-panel { border-radius: 0; }
+@media screen and (max-width: 48em) {
+  .vault-fab { right: 1.2rem; bottom: 3.6rem; left: auto; }
+}
+@media print { .vault-fab, .vault-panel, .vault-overlay { display: none; } }
+
+/* One TREE: the four parts, with this page's modules and tasks under the current part. */
+#tree a.lvl-1 { color: var(--ink-2); }
+#tree a.lvl-1.on { color: var(--ink); }
+#tree a.lvl-1.on .br { color: var(--accent); }
+#tree .tree-sections { padding-left: 1.1rem; margin: .1rem 0 .3rem; }
+
+/* V3 nests tabs up to four deep. Borders and side padding at every level drew
+   stacked lines down both sides and narrowed the text, so tabs are borderless. */
+.md-typeset.prose .tabbed-set { border: 0; }
+.md-typeset.prose .tabbed-labels { padding: 0; }
+.md-typeset.prose .tabbed-content { padding: .4rem 0 .2rem; }
+#tree .tree-part.collapsed .tree-sections { display: none; }
+
+/* Tab titles flattened into headings: h4 section, h5 step, h6 sub-step. */
+.md-typeset.prose h6 {
+  font-family: var(--sans);
+  font-weight: 600;
+  font-size: .78rem;
+  line-height: 1.4;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--ink);
+  margin: 1.6rem 0 .6rem;
+  scroll-margin-top: calc(var(--nav-h) + 1.5rem);
+}
+
+/* Three-step variant of the reference guide's flow diagram. */
+.md-typeset.prose ol.flow.three { grid-template-columns: repeat(3, minmax(0, 1fr)); }

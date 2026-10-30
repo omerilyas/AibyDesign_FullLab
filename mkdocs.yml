@@ -1,0 +1,99 @@
+site_name: "AI by Design"
+site_description: "Hands-on GenAI lab guide. Part 1: overview and setup. Part 2: AI foundations (tokenization, embeddings, vector databases, Gemini Embedding 2). Part 3: RAG, File Search and multimodal RAG. Part 4: GenAI frameworks, Groq and Hugging Face."
+site_author: Omer Ilyas
+site_url: https://omerilyas.github.io/AibyDesign_FullLab/
+copyright: "AI by Design · Frameworks, Tools & Innovation · Omer Ilyas, Technical Marketing Engineer"
+
+theme:
+  name: material
+  custom_dir: overrides
+  language: en
+  font: false # fonts are loaded in overrides/main.html
+  favicon: assets/favicon.svg
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: custom
+      accent: custom
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: custom
+      accent: custom
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode
+  features:
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+    - content.tabs.link
+    - content.code.annotate
+
+extra:
+  generator: false
+
+markdown_extensions:
+  - toc:
+      toc_depth: 3
+  - abbr
+  - admonition
+  - attr_list
+  - def_list
+  - footnotes
+  - sane_lists
+  - md_in_html
+  - tables
+  - pymdownx.details
+  - pymdownx.blocks.caption
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.keys
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.critic
+  - pymdownx.caret
+  - pymdownx.mark
+  - pymdownx.tilde
+
+extra_css:
+  - css/lab.css
+  - css/v3.css
+
+extra_javascript:
+  - js/lab.js
+
+hooks:
+  - hooks/image_size.py
+
+plugins:
+  - search
+  - glightbox:
+      skip_classes:
+        - icon
+      zoomable: true
+      draggable: false
+
+validation:
+  anchors: warn
+
+nav:
+  - "Part 1 · Overview & Setup": index.md
+  - "Part 2 · AI Foundations": part-2/index.md
+  - "Part 3 · RAG": part-3/index.md
+  - "Part 4 · Frameworks & Models": part-4/index.md
